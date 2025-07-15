@@ -1,0 +1,43 @@
+base_path: '../../data/sleep_edfx'
+holdout_subject_size: 30
+test_size: 0.20
+modality_name2path:
+  'EEG Fpz-Cz': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EEG Fpz-Cz/model/best_model.pth'
+  'EEG Pz-Oz': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EEG Pz-Oz/model/best_model.pth'
+  'EOG horizontal': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EOG horizontal/model/best_model.pth'
+sfreq: 100
+rfreq: 100
+data_scaler: false
+
+train_epochs: 30
+train_warmup_epoch: 1
+train_base_learning_rate: 0.0001
+train_batch_size: 512
+train_batch_accumulation: 1
+
+second: 30
+time_window: 4
+time_step: 1
+backbone_embed_dim: 512
+backbone_num_frames: 27
+encoder_embed_dim: 512
+encoder_heads: 8
+encoder_depths: 6
+decoder_embed_dim: 512
+decoder_heads: 8
+decoder_depths: 4
+decoder_recon_depths: 8
+alpha: 1.0
+projection_hidden:
+  - 1024
+  - 512
+temperature: 0.1
+mask_ratio: 0.4
+
+lora_r: 4
+lora_alpha: 16
+lora_dropout: 0.05
+
+print_point: 20
+ckpt_path: '../../ckpt/sleep_edfx/synthnet/main/'
+model_name: 'synthnet'

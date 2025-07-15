@@ -1,0 +1,42 @@
+base_path: '../../data/vitaldb_60sec_5min'
+holdout_subject_size: 30
+test_size: 0.20
+ch_name2path:
+  'ABP': '/home/chlee/WorkSpace/MM/ckpt/vitaldb/neuronet/ABP/neuronet/model/best_model.pth'
+  'ECG': '/home/chlee/WorkSpace/MM/ckpt/vitaldb/neuronet/ECG/model/best_model.pth'
+  'PPG': '/home/chlee/WorkSpace/MM/ckpt/vitaldb/neuronet/PPG/neuronet/model/best_model.pth'
+sfreq: 100
+rfreq: 100
+data_scaler: false
+
+train_epochs: 50
+train_warmup_epoch: 1
+train_base_learning_rate: 0.0001
+train_batch_size: 128
+train_batch_accumulation: 1
+
+second: 30
+time_window: 4
+time_step: 1
+backbone_embed_dim: 512
+backbone_num_frames: 20
+encoder_embed_dim: 512
+encoder_heads: 8
+encoder_depths: 4
+decoder_embed_dim: 256
+decoder_heads: 8
+decoder_depths: 3
+alpha: 1.0
+projection_hidden:
+  - 1024
+  - 512
+temperature: 0.1
+mask_ratio: 0.85
+
+lora_r: 4
+lora_alpha: 16
+lora_dropout: 0.05
+
+print_point: 20
+ckpt_path: '../../ckpt/vital_db/synthnet'
+model_name: 'synthnet'
