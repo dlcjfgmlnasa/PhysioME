@@ -2,9 +2,9 @@ base_path: '../../data/sleep_edfx'
 holdout_subject_size: 30
 test_size: 0.20
 modality_name2path:
-  'EEG Fpz-Cz': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EEG Fpz-Cz/model/best_model.pth'
-  'EEG Pz-Oz': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EEG Pz-Oz/model/best_model.pth'
-  'EOG horizontal': '/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/neuronet/EOG horizontal/model/best_model.pth'
+  'EEG Fpz-Cz': '../../ckpt/sleep_edfx/neuronet/EEG Fpz-Cz/model/best_model.pth'
+  'EEG Pz-Oz': '../../ckpt/sleep_edfx/neuronet/EEG Pz-Oz/model/best_model.pth'
+  'EOG horizontal': '../../ckpt/sleep_edfx/neuronet/EOG horizontal/model/best_model.pth'
 sfreq: 100
 rfreq: 100
 data_scaler: false
@@ -39,5 +39,5 @@ lora_alpha: 16
 lora_dropout: 0.05
 
 print_point: 20
-ckpt_path: '../../ckpt/sleep_edfx/synthnet/main/'
-model_name: 'synthnet'
+ckpt_path: '../../ckpt/sleep_edfx/physiome/'
+model_name: 'physiome'
