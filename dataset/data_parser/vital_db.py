@@ -2,8 +2,16 @@
 import os
 import tqdm
 import vitaldb
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--src_path', default=os.path.join('..', '..', '..', '..', 'Dataset', 'vitaldb'))
+    parser.add_argument('--trg_path', default=os.path.join('..', '..', 'data', 'vitaldb'))
+    return parser.parse_args()
 
 
 def extract_sample(data, sfreq: int = 100, duration: int = 60):
@@ -72,7 +80,8 @@ def vitaldb_converter(src_path, trg_path, sfreq=100, duration=60):
 
 
 if __name__ == '__main__':
+    augments = get_args()
     vitaldb_converter(
-        src_path=os.path.join('..', '..', '..', '..', 'Dataset', 'vitaldb'),
-        trg_path=os.path.join('..', '..', 'data', 'vitaldb_60sec_5min')
+        src_path=augments.src_path,
+        trg_path=augments.trg_path
     )

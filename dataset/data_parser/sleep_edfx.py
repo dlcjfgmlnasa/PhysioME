@@ -2,7 +2,17 @@
 import os
 import mne
 import glob
+import argparse
 import numpy as np
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--src_path', default=os.path.join('..', '..', '..', '..',
+                                                           'Dataset', 'physionet.org',
+                                                           'files', 'sleep-edfx', '1.0.0', 'sleep-cassette'))
+    parser.add_argument('--trg_path', default=os.path.join('..', '..', 'data', 'sleep_edfx'))
+    return parser.parse_args()
 
 
 def sleep_physionet_converter(src_path, trg_path, duration=30):
@@ -79,8 +89,8 @@ def sleep_physionet_converter(src_path, trg_path, duration=30):
 
 
 if __name__ == '__main__':
+    augments = get_args()
     sleep_physionet_converter(
-        src_path=os.path.join('..', '..', '..', '..', 'Dataset', 'physionet.org',
-                              'files', 'sleep-edfx', '1.0.0', 'sleep-cassette'),
-        trg_path=os.path.join('..', '..', 'data', 'sleep_edfx')
+        src_path=augments.src_path,
+        trg_path=augments.trg_path
     )
