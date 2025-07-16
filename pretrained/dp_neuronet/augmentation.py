@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+# --------------------------------------------------------
+# References:
+# - https://github.com/belita0152/SimCLR/blob/main/dataset/augmentation.py
+# - https://github.com/belita0152/Physiological_Signal_Segmentation/blob/main/pretrained/augmentation.py
+# --------------------------------------------------------
+
 import copy
 import torch
 import random
