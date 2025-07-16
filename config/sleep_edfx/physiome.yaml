@@ -39,5 +39,5 @@ lora_alpha: 16
 lora_dropout: 0.05
 
 print_point: 20
-ckpt_path: '../../ckpt/sleep_edfx/physiome/'
+ckpt_path: '../../ckpt/sleep_edfx/'
 model_name: 'physiome'

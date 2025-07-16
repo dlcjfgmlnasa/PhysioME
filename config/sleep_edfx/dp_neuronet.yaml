@@ -35,5 +35,5 @@ temperature: 0.1
 mask_ratio: 0.8
 
 print_point: 20
-ckpt_path: '../../ckpt/sleep_edfx/neuronet'
+ckpt_path: '../../ckpt/sleep_edfx/'
 model_name: 'neuronet'

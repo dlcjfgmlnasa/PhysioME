@@ -1,4 +1,4 @@
-base_path: '../../data/vitaldb_60sec_5min'
+base_path: '../../data/vitaldb'
 holdout_subject_size: 100
 test_size: 0.20
 ch_names:
@@ -35,5 +35,5 @@ temperature: 0.1
 mask_ratio: 0.9
 
 print_point: 20
-ckpt_path: '../../ckpt/vitaldb/neuronet/PPG'
+ckpt_path: '../../ckpt/vitaldb/'
 model_name: 'neuronet'

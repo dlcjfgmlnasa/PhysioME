@@ -1,4 +1,4 @@
-base_path: '../../data/vitaldb_60sec_5min'
+base_path: '../../data/vitaldb'
 holdout_subject_size: 30
 test_size: 0.20
 ch_name2path:
@@ -38,5 +38,5 @@ lora_alpha: 16
 lora_dropout: 0.05
 
 print_point: 20
-ckpt_path: '../../ckpt/vital_db/physiome'
+ckpt_path: '../../ckpt/vital_db/'
 model_name: 'physiome'
