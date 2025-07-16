@@ -12,15 +12,15 @@ import argparse
 import warnings
 import numpy as np
 import torch.optim as opt
-from cuml.svm import SVC
 from models.utils import model_size
+from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.tensorboard import SummaryWriter
 from sklearn.metrics import accuracy_score, f1_score
 from torch.utils.data import DataLoader
 from dataset.utils import group_cross_validation
-from pretrained.neuronet.data_loader import TorchDataset
-from pretrained.neuronet.augmentation import DataAugmentationNeuroNet
-from models.neuronet.model import NeuroNet
+from pretrained.dp_neuronet.data_loader import TorchDataset
+from pretrained.dp_neuronet.augmentation import DataAugmentationNeuroNet
+from models.dp_neuronet.model import NeuroNet
 
 
 warnings.filterwarnings(action='ignore')
@@ -80,6 +80,7 @@ class Trainer(object):
 
         print('[NeuroNet Parameter]')
         print('   >> Model Size : {0:.2f}MB'.format(model_size(self.model)))
+        print('   >> Modal Name : {0}'.format(self.args.ch_names[self.args.ch_idx]))
         print('   >> Frame Size : {0}'.format(self.model.num_patches))
         print('   >> Leaning Rate : {0}\n'.format(self.lr))
 
@@ -154,7 +155,7 @@ class Trainer(object):
         self.model.eval()
         (train_x, train_y), (test_x, test_y) = self.get_latent_vector(val_dataloader), \
                                                self.get_latent_vector(eval_dataloader)
-        model = SVC()
+        model = KNeighborsClassifier()
         model.fit(train_x, train_y)
         out = model.predict(test_x)
         acc, mf1 = accuracy_score(test_y, out), f1_score(test_y, out, average='macro')

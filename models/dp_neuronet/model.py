@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 from typing import List
-from models.neuronet.resnet1d import FrameBackBone
+from models.dp_neuronet.resnet1d import FrameBackBone
 from timm.models.vision_transformer import Block
 from models.utils import get_2d_sincos_pos_embed_flexible, interpolate_1d_pos_embed
 from models.loss import NTXentLoss

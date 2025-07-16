@@ -13,14 +13,13 @@ import argparse
 import numpy as np
 from itertools import combinations
 import torch.optim as opt
-from cuml.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from collections import OrderedDict
 from models.utils import model_size
 from dataset.utils import group_cross_validation
 from torch.utils.tensorboard import SummaryWriter
-from models.neuronet.model import NeuroNet, NeuroNetEncoder
+from models.dp_neuronet.model import NeuroNet, NeuroNetEncoder
 from models.physiome.model import PhysioME
 from pretrained.physiome.data_loader import TorchDataset
 from torch.utils.data import DataLoader
@@ -159,7 +158,7 @@ class Trainer(object):
         for modal_combination in modal_combinations:
             (train_x, train_y), (test_x, test_y) = self.get_latent_vector(modal_combination, val_dataloader), \
                                                    self.get_latent_vector(modal_combination, eval_dataloader)
-            model = SVC()
+            model = KNeighborsClassifier()
             model.fit(train_x, train_y)
             pred_y = model.predict(test_x)
             acc, mf1 = accuracy_score(test_y, pred_y), f1_score(test_y, pred_y, average='macro')
