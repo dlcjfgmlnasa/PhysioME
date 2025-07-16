@@ -8,6 +8,7 @@ modality_name2path:
 sfreq: 100
 rfreq: 100
 data_scaler: false
+class_downsampling: false
 
 train_epochs: 30
 train_warmup_epoch: 1
