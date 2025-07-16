@@ -40,19 +40,16 @@ def get_args():
     parser.add_argument('--base_path', default=os.path.join('..', 'data', 'sleep_edfx'), type=str)
     parser.add_argument('--holdout_subject_size', default=30, type=int)
     parser.add_argument('--test_size', default=0.30, type=float)
-    # parser.add_argument('--test_size', default=0.18, type=float)
 
     parser.add_argument('--pretrain_ckpt_path',
-                        default='/home/chlee/WorkSpace/MM/ckpt/sleep_edfx/synthnet/main',
+                        default=os.path.join('..', '..', 'ckpt', 'sleep_edfx', 'physiome'),
                         type=str)
     parser.add_argument('--class_num', default=5, type=int)
 
     # Modality 1 => ['EEG Fpz-Cz']
     # Modality 2 => ['EEG Fpz-Cz', 'EOG horizontal']
     # Modality 3 => ['EEG Fpz-Cz', 'EEG Pz-Oz', 'EOG horizontal']
-    # parser.add_argument('--select_ch_names', default=['EOG horizontal'], type=List)
-    parser.add_argument('--select_ch_names', default=['EEG Pz-Oz', 'EOG horizontal'], type=List)
-    # parser.add_argument('--select_ch_names', default=['EEG Fpz-Cz', 'EEG Pz-Oz', 'EOG horizontal'], type=List)
+    parser.add_argument('--select_ch_names', default=['EEG Fpz-Cz'], type=List)
     parser.add_argument('--sfreq', default=100, type=int)
 
     # Train Hyperparameter
@@ -144,10 +141,13 @@ class Trainer(object):
         return loss, (pred, pred_prob, real)
 
     def save_ckpt(self, model_state, result):
-        if not os.path.exists(os.path.join(self.args.pretrain_ckpt_path, 'linear_prob', '2_3')):
-            os.makedirs(os.path.join(self.args.pretrain_ckpt_path, 'linear_prob', '2_3'))
+        if not os.path.exists(os.path.join(self.args.pretrain_ckpt_path, 'linear_prob',
+                                           '{}'.format('.'.join(self.args.select_ch_names)))):
+            os.makedirs(os.path.join(self.args.pretrain_ckpt_path, 'linear_prob',
+                                     '{}'.format('.'.join(self.args.select_ch_names))))
 
-        ckpt_path = os.path.join(self.args.pretrain_ckpt_path, 'linear_prob', '2_3', 'best_model.pth')
+        ckpt_path = os.path.join(self.args.pretrain_ckpt_path, 'linear_prob',
+                                 '{}'.format('.'.join(self.args.select_ch_names)), 'best_model.pth')
 
         unimodal_param, multimodal_param = self.model_param
         torch.save({
