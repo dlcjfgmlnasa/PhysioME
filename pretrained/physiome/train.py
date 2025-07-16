@@ -82,15 +82,20 @@ class Trainer(object):
         self.tensorboard_writer = SummaryWriter(log_dir=self.tensorboard_path)
 
         print('[PhysioME Parameter]')
+        print('   >> Modal Names : {0}'.format(', '.join(self.ch_names)))
         print('   >> Model Size : {0:.2f}MB'.format(model_size(self.model)))
         print('   >> Leaning Rate : {0}'.format(self.lr))
 
     def train(self):
-        train_dataset = TorchDataset(paths=self.train_paths, ch_names=self.ch_names)
+        train_dataset = TorchDataset(paths=self.train_paths, ch_names=self.ch_names,
+                                     sfreq=self.args.sfreq, rfreq=self.args.rfreq, scaler=self.args.data_scaler)
         train_dataloader = DataLoader(train_dataset, batch_size=self.args.train_batch_size, shuffle=True)
-        val_dataset = TorchDataset(paths=self.val_paths, ch_names=self.ch_names)
+        val_dataset = TorchDataset(paths=self.val_paths, ch_names=self.ch_names,
+                                   sfreq=self.args.sfreq, rfreq=self.args.rfreq, scaler=self.args.data_scaler,
+                                   downsampling=self.args.class_downsampling)
         val_dataloader = DataLoader(val_dataset, batch_size=self.args.train_batch_size)
-        eval_dataset = TorchDataset(paths=self.eval_paths, ch_names=self.ch_names)
+        eval_dataset = TorchDataset(paths=self.eval_paths, ch_names=self.ch_names,
+                                    sfreq=self.args.sfreq, rfreq=self.args.rfreq, scaler=self.args.data_scaler)
         eval_dataloader = DataLoader(eval_dataset, batch_size=self.args.train_batch_size)
 
         total_step = 0
@@ -158,7 +163,7 @@ class Trainer(object):
         for modal_combination in modal_combinations:
             (train_x, train_y), (test_x, test_y) = self.get_latent_vector(modal_combination, val_dataloader), \
                                                    self.get_latent_vector(modal_combination, eval_dataloader)
-            model = KNeighborsClassifier()
+            model = SVC()
             model.fit(train_x, train_y)
             pred_y = model.predict(test_x)
             acc, mf1 = accuracy_score(test_y, pred_y), f1_score(test_y, pred_y, average='macro')
@@ -177,12 +182,11 @@ class Trainer(object):
         with torch.no_grad():
             for data in dataloader:
                 x, y = data
-                latent = self.model.inference_missing_modality(
-                    data={
-                        ch_name: x[:, i, :].squeeze().to(device)
-                        for i, ch_name in enumerate(modal_combination)
-                    }
-                )
+                data = {
+                    ch_name: x[:, i, :].squeeze().to(device)
+                    for i, ch_name in enumerate(modal_combination)
+                }
+                latent = self.model.inference_missing_modality(data=data)
                 total_x.append(latent.detach().cpu().numpy())
                 total_y.append(y.detach().cpu().numpy())
 
@@ -219,13 +223,13 @@ class Trainer(object):
             new_param = {on: nv for on, nv in zip(new_param.keys(), old_param.values())}
             return new_param
 
-        # 1. Load Pretrained Model (= NeuroNet)
+        # 1. pretrained model
         ckpt = torch.load(ckpt_path, map_location='cpu')
         model_parameter = ckpt['model_parameter']
         pretrained_model = NeuroNet(**model_parameter)
         pretrained_model.load_state_dict(ckpt['model_state'])
 
-        # 2. Convert NeuroNet to NeuroNetEncoder
+        # 2. NeuroNetEncoder
         backbone = NeuroNetEncoder(
             fs=model_parameter['fs'], second=model_parameter['second'],
             time_window=model_parameter['time_window'], time_step=model_parameter['time_step'],
