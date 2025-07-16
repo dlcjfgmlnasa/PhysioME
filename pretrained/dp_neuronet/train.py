@@ -41,7 +41,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_yaml',
                         type=str,
-                        default=os.path.join('..', '..', 'config', 'vital_db', 'neuronet.yaml'))
+                        default=os.path.join('..', '..', 'config', 'sleep_edfx', 'dp_neuronet.yaml'))
     return parser.parse_args()
 
 
@@ -180,7 +180,7 @@ class Trainer(object):
             os.makedirs(ckpt_path)
 
         torch.save({
-            'model_name': 'NeuroNet',
+            'model_name': 'DP-NeuroNet',
             'model_state': model_state,
             'model_parameter': {
                 'fs': self.args.rfreq, 'second': self.args.second,

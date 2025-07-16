@@ -22,7 +22,7 @@ from dataset.utils import group_cross_validation
 from torch.utils.tensorboard import SummaryWriter
 from models.neuronet.model import NeuroNet, NeuroNetEncoder
 from models.physiome.model import PhysioME
-from pretrained.synthnet.data_loader import TorchDataset
+from pretrained.physiome.data_loader import TorchDataset
 from torch.utils.data import DataLoader
 from peft import get_peft_model, LoraConfig
 
@@ -178,11 +178,12 @@ class Trainer(object):
         with torch.no_grad():
             for data in dataloader:
                 x, y = data
-                data = {
-                    ch_name: x[:, i, :].squeeze().to(device)
-                    for i, ch_name in enumerate(modal_combination)
-                }
-                latent = self.model.inference_missing_modality(data=data)
+                latent = self.model.inference_missing_modality(
+                    data={
+                        ch_name: x[:, i, :].squeeze().to(device)
+                        for i, ch_name in enumerate(modal_combination)
+                    }
+                )
                 total_x.append(latent.detach().cpu().numpy())
                 total_y.append(y.detach().cpu().numpy())
 
@@ -219,13 +220,13 @@ class Trainer(object):
             new_param = {on: nv for on, nv in zip(new_param.keys(), old_param.values())}
             return new_param
 
-        # 1. pretrained model
+        # 1. Load Pretrained Model (= NeuroNet)
         ckpt = torch.load(ckpt_path, map_location='cpu')
         model_parameter = ckpt['model_parameter']
         pretrained_model = NeuroNet(**model_parameter)
         pretrained_model.load_state_dict(ckpt['model_state'])
 
-        # 2. NeuroNetEncoder
+        # 2. Convert NeuroNet to NeuroNetEncoder
         backbone = NeuroNetEncoder(
             fs=model_parameter['fs'], second=model_parameter['second'],
             time_window=model_parameter['time_window'], time_step=model_parameter['time_step'],
