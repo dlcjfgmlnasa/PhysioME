@@ -16,8 +16,8 @@ train_batch_size: 128
 train_batch_accumulation: 1
 
 second: 30
-time_window: 4
-time_step: 1
+time_window: 3
+time_step: 3
 backbone_embed_dim: 512
 backbone_num_frames: 20
 encoder_embed_dim: 512
@@ -31,7 +31,7 @@ projection_hidden:
   - 1024
   - 512
 temperature: 0.1
-mask_ratio: 0.85
+mask_ratio: 0.8
 
 lora_r: 4
 lora_alpha: 16

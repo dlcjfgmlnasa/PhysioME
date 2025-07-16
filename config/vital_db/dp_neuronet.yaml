@@ -32,7 +32,7 @@ projection_hidden:
   - 1024
   - 512
 temperature: 0.1
-mask_ratio: 0.9
+mask_ratio: 0.8
 
 print_point: 20
 ckpt_path: '../../ckpt/vitaldb/'
